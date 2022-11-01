@@ -1,16 +1,10 @@
 import Head from 'next/head';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
 import { usePrefectureList } from '../hooks/usePrefectureList';
 import styles from '../styles/Home.module.css';
 import { Prefecture } from '../types/prefecture';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import {
-  ChartOption,
-  PopulationChartData,
-  usePopulationChart,
-} from '../hooks/useChartPopulation';
+import { ChartOption, usePopulationChart } from '../hooks/useChartPopulation';
 
 export default function Home() {
   const { prefectureData } = usePrefectureList();
