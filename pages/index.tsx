@@ -2,17 +2,19 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { usePrefectureList } from '../hooks/usePrefectureList';
-import { usePrefecturePopulation } from '../hooks/usePrefecturePopulation';
 import styles from '../styles/Home.module.css';
 import { Prefecture } from '../types/prefecture';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import { PopulationChartData } from '../hooks/usePrefecturePopulation';
+import {
+  ChartOption,
+  PopulationChartData,
+  usePopulationChart,
+} from '../hooks/useChartPopulation';
 
 export default function Home() {
   const { prefectureData } = usePrefectureList();
-  const { makeChartOptions, populationChartDataList } =
-    usePrefecturePopulation();
+  const { updateChartOptions, chartOption } = usePopulationChart();
 
   return (
     <div className={styles.container}>
@@ -29,33 +31,31 @@ export default function Home() {
               return (
                 <PrefectureCheckBox
                   prefecture={prefecture}
-                  makeChartOptions={makeChartOptions}
+                  updateChartOptions={updateChartOptions}
                 ></PrefectureCheckBox>
               );
             })}
           </div>
         </div>
       )}
-      <PupulationChart
-        chartDataList={populationChartDataList}
-      ></PupulationChart>
+      <PupulationChart chartOption={chartOption}></PupulationChart>
     </div>
   );
 }
 
 const PrefectureCheckBox = ({
   prefecture,
-  makeChartOptions,
+  updateChartOptions,
 }: {
   prefecture: Prefecture;
-  makeChartOptions: (newSelectedPrefCode: string) => void;
+  updateChartOptions: (newSelectedPrefCode: string) => void;
 }) => {
   return (
     <>
       <div style={{ display: 'flex' }}>
         <input
           type="checkbox"
-          onChange={() => makeChartOptions(prefecture.prefCode)}
+          onChange={() => updateChartOptions(prefecture.prefCode)}
         />
         <div key={prefecture.prefCode}>{prefecture.prefName}</div>
       </div>
@@ -63,30 +63,7 @@ const PrefectureCheckBox = ({
   );
 };
 
-const PupulationChart = ({
-  chartDataList,
-}: {
-  chartDataList: PopulationChartData[];
-}) => {
-  const series = chartDataList.map((data) => {
-    return { name: data.prefCode, data: data.dataList };
-  });
-  console.log(series, 'seriea');
-  const options = {
-    title: {
-      text: '人口増減率',
-    },
-    plotOptions: {
-      series: {
-        label: {
-          connectorAllowed: false,
-        },
-        pointInterval: 5,
-        pointStart: 1960,
-      },
-    },
-    series: series,
-  };
+const PupulationChart = ({ chartOption }: { chartOption: ChartOption }) => {
   return (
     <>
       <div>
@@ -99,7 +76,7 @@ const PupulationChart = ({
         <p>
           <a href="https://opendata.resas-portal.go.jp/">RESAS API</a>
         </p>
-        <HighchartsReact highcharts={Highcharts} options={options} />
+        <HighchartsReact highcharts={Highcharts} options={chartOption} />
       </div>
     </>
   );
