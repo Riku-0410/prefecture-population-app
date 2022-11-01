@@ -6,7 +6,12 @@ export const useFetch = <T>() => {
     fetch(`${RESAS_API_END_POINT}/${url}`, {
       method: 'GET',
       headers: { 'x-api-key': RESAS_API_KEY },
-    }).then((res) => res.json());
+    })
+      .then((res) => res.json())
+      .catch((e) => {
+        console.error(e);
+        throw e;
+      });
 
   return { get };
 };
