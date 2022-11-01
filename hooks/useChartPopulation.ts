@@ -1,3 +1,4 @@
+import { Prefecture } from './../types/prefecture';
 import { usePrefecturePopulation } from './usePrefecturePopulation';
 import { useEffect, useState } from 'react';
 
@@ -19,6 +20,18 @@ export type ChartOption = {
       pointStart: number;
     };
   };
+  scrollbar: {
+    enabled: true;
+  };
+  responsive: {
+    rules: [
+      {
+        condition: {
+          minWidth: number;
+        };
+      },
+    ];
+  };
   series: { name: string; data: number[] }[];
 };
 
@@ -26,8 +39,9 @@ export const usePopulationChart = () => {
   const { fetchPupulationData } = usePrefecturePopulation();
   const options: ChartOption = {
     title: {
-      text: '人口増減率',
+      text: '都道府県別人口増減率',
     },
+
     plotOptions: {
       series: {
         label: {
@@ -37,25 +51,38 @@ export const usePopulationChart = () => {
         pointStart: 1960,
       },
     },
+    scrollbar: {
+      enabled: true,
+    },
+    responsive: {
+      rules: [
+        {
+          condition: {
+            minWidth: 400,
+          },
+        },
+      ],
+    },
+
     series: [],
   };
 
   const [chartOption, setChartOption] = useState<ChartOption>(options);
 
-  const updateChartOptions = (newSelectedPrefCode: string) => {
-    if (chartOption.series.find((data) => data.name === newSelectedPrefCode)) {
+  const updateChartOptions = (prefecture: Prefecture) => {
+    if (chartOption.series.find((data) => data.name === prefecture.prefName)) {
       const newSelectedPrefCodes = chartOption.series.filter((data) => {
-        return data.name !== newSelectedPrefCode;
+        return data.name !== prefecture.prefName;
       });
       setChartOption({ ...chartOption, series: [...newSelectedPrefCodes] });
     } else {
-      fetchPupulationData({ prefCode: newSelectedPrefCode }).then((data) => {
+      fetchPupulationData({ prefCode: prefecture.prefCode }).then((data) => {
         const dataList = data.result.data[0].data.map((allPopulationData) => {
           return allPopulationData.value;
         });
 
         chartOption.series.push({
-          name: newSelectedPrefCode,
+          name: prefecture.prefName,
           data: dataList,
         });
         setChartOption({
