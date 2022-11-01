@@ -8,6 +8,12 @@ export type PopulationChartData = {
 };
 
 export type ChartOption = {
+  chart: {
+    scrollablePlotArea: {
+      minWidth: 700;
+      scrollPositionX: 1;
+    };
+  };
   title: {
     text: string;
   };
@@ -20,17 +26,13 @@ export type ChartOption = {
       pointStart: number;
     };
   };
-  scrollbar: {
-    enabled: true;
-  };
-  responsive: {
-    rules: [
-      {
-        condition: {
-          minWidth: number;
-        };
-      },
-    ];
+  yAxis: {
+    tickWidth: 1;
+    title: {
+      text: string;
+    };
+    lineWidth: 1;
+    opposite: boolean;
   };
   series: { name: string; data: number[] }[];
 };
@@ -38,8 +40,14 @@ export type ChartOption = {
 export const usePopulationChart = () => {
   const { fetchPupulationData } = usePrefecturePopulation();
   const options: ChartOption = {
+    chart: {
+      scrollablePlotArea: {
+        minWidth: 700,
+        scrollPositionX: 1,
+      },
+    },
     title: {
-      text: '都道府県別人口増減率',
+      text: '',
     },
 
     plotOptions: {
@@ -51,17 +59,13 @@ export const usePopulationChart = () => {
         pointStart: 1960,
       },
     },
-    scrollbar: {
-      enabled: true,
-    },
-    responsive: {
-      rules: [
-        {
-          condition: {
-            minWidth: 400,
-          },
-        },
-      ],
+    yAxis: {
+      tickWidth: 1,
+      title: {
+        text: '人口',
+      },
+      lineWidth: 1,
+      opposite: false,
     },
 
     series: [],
