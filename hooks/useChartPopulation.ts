@@ -47,7 +47,7 @@ export const usePopulationChart = () => {
       const newSelectedPrefCodes = chartOption.series.filter((data) => {
         return data.name !== newSelectedPrefCode;
       });
-      setChartOption({ ...chartOption });
+      setChartOption({ ...chartOption, series: [...newSelectedPrefCodes] });
     } else {
       fetchPupulationData({ prefCode: newSelectedPrefCode }).then((data) => {
         const dataList = data.result.data[0].data.map((allPopulationData) => {
