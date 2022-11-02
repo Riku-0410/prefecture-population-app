@@ -1,11 +1,9 @@
 import Head from 'next/head';
-import { usePrefectureList } from '../hooks/usePrefectureList';
 import styles from '../styles/Home.module.css';
 import { usePopulationChart } from '../hooks/useChartPopulation';
 import React from 'react';
 import { PupulationChart } from '../components/PopulationChart';
-import { PrefectureCheckBox } from '../components/PrefectureCheckBox';
-import { Prefecture } from '../types/prefecture';
+import { PrefectureList } from '../components/PrefectureList';
 
 export default function Home() {
   const { updateChartOptions, chartOption } = usePopulationChart();
@@ -27,30 +25,3 @@ export default function Home() {
     </div>
   );
 }
-
-const PrefectureList = ({
-  updateChartOptions,
-}: {
-  updateChartOptions: (prefecture: Prefecture) => void;
-}) => {
-  const { prefectureData } = usePrefectureList();
-  return (
-    <>
-      {prefectureData?.result && (
-        <div>
-          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {prefectureData.result.map((prefecture) => {
-              return (
-                <PrefectureCheckBox
-                  key={prefecture.prefCode}
-                  prefecture={prefecture}
-                  updateChartOptions={updateChartOptions}
-                ></PrefectureCheckBox>
-              );
-            })}
-          </div>
-        </div>
-      )}
-    </>
-  );
-};

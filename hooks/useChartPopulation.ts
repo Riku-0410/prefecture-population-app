@@ -1,6 +1,6 @@
 import { Prefecture } from './../types/prefecture';
 import { usePrefecturePopulation } from './usePrefecturePopulation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export type PopulationChartData = {
   prefCode: string;
