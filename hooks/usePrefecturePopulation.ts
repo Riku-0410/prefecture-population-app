@@ -26,10 +26,7 @@ export const usePrefecturePopulation = () => {
 
   const fetchPupulationData = (params: PopulationParams) => {
     const populationParams = new URLSearchParams(params);
-    return get(
-      'api/v1/population/composition/perYear' +
-        `?${populationParams}&cityCode=-`,
-    );
+    return get('resasAPI/populations' + `?${populationParams}`);
   };
 
   return { fetchPupulationData };

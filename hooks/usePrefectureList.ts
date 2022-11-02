@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Prefecture } from '../types/prefecture';
 import { useFetch } from './useFetch';
 
@@ -13,14 +13,21 @@ export const usePrefectureList = () => {
     null,
   );
   const fetchPrefectureData = () => {
-    get('api/v1/prefectures').then((data) => {
-      console.log(data);
+    get('resasAPI/prefectures').then((data) => {
       setPrefectureData(data);
     });
   };
 
+  const refFirstRef = useRef(true);
+
   useEffect(() => {
-    fetchPrefectureData();
+    if (process.env.NODE_ENV === 'development') {
+      if (refFirstRef.current) {
+        fetchPrefectureData();
+        refFirstRef.current = false;
+        return;
+      }
+    }
   }, []);
   return { prefectureData };
 };
