@@ -19,7 +19,7 @@ export const PrefectureCheckBox = ({
   return (
     <>
       <div style={{ display: 'flex' }} onClick={onSelectPrefecture}>
-        <input type="checkbox" checked={isSelectedPrefecture} />
+        <input type="checkbox" checked={isSelectedPrefecture} readOnly={true} />
         <div key={prefecture.prefCode}>{prefecture.prefName}</div>
       </div>
     </>
