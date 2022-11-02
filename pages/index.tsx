@@ -5,9 +5,9 @@ import { usePopulationChart } from '../hooks/useChartPopulation';
 import React from 'react';
 import { PupulationChart } from '../components/PopulationChart';
 import { PrefectureCheckBox } from '../components/PrefectureCheckBox';
+import { Prefecture } from '../types/prefecture';
 
 export default function Home() {
-  const { prefectureData } = usePrefectureList();
   const { updateChartOptions, chartOption } = usePopulationChart();
 
   return (
@@ -20,10 +20,26 @@ export default function Home() {
       <div style={{ paddingTop: '40px', textAlign: 'center' }}>
         <h1>都道府県別人口表示アプリ</h1>
       </div>
+      <PrefectureList updateChartOptions={updateChartOptions}></PrefectureList>
+      <div style={{ marginTop: '40px' }}>
+        <PupulationChart chartOption={chartOption}></PupulationChart>
+      </div>
+    </div>
+  );
+}
+
+const PrefectureList = ({
+  updateChartOptions,
+}: {
+  updateChartOptions: (prefecture: Prefecture) => void;
+}) => {
+  const { prefectureData } = usePrefectureList();
+  return (
+    <>
       {prefectureData?.result && (
         <div>
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {prefectureData?.result.map((prefecture) => {
+            {prefectureData.result.map((prefecture) => {
               return (
                 <PrefectureCheckBox
                   key={prefecture.prefCode}
@@ -35,9 +51,6 @@ export default function Home() {
           </div>
         </div>
       )}
-      <div style={{ marginTop: '40px' }}>
-        <PupulationChart chartOption={chartOption}></PupulationChart>
-      </div>
-    </div>
+    </>
   );
-}
+};
